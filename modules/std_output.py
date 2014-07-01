@@ -17,7 +17,7 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-def stdoutput(name,size,time,dll,sect,md5,sha1,imph,packer,antidbg,antivm,directory,pefver,date,au_show_pack,au_show_adbg,au_show_avm,au_show_api,au_show_sec,au_show_furl,au_show_meta):
+def stdoutput(name,size,time,dll,sect,sig,md5,sha1,imph,packer,antidbg,antivm,directory,pefver,date,au_show_pack,au_show_adbg,au_show_avm,au_show_api,au_show_sec,au_show_furl,au_show_meta):
 	print "\nShort information"
 	print "-"*60
 	print "File Name".ljust(18), str(name)
@@ -25,6 +25,7 @@ def stdoutput(name,size,time,dll,sect,md5,sha1,imph,packer,antidbg,antivm,direct
 	print "Compile Time".ljust(18), str(time)
 	print "DLL".ljust(18), str(dll)
 	print "Sections".ljust(18), str(sect)
+	print "Signed".ljust(18), str(sig)
 	print "Hash MD5".ljust(18), str(md5)
 	print "Hash SAH1".ljust(18), str(sha1)
 	print "Imphash".ljust(18), str(imph)

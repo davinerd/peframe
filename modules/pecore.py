@@ -69,6 +69,7 @@ def get_info(filename):
 	ts = pe.FILE_HEADER.TimeDateStamp 		# timestamp
 	dl = pe.FILE_HEADER.IMAGE_FILE_DLL		# dll
 	sc = pe.FILE_HEADER.NumberOfSections	# sections
+	ad = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress
 
 	#print "Optional Header:\t\t", hex(pe.OPTIONAL_HEADER.ImageBase)
 	#print "Address Of Entry Point:\t\t", hex(pe.OPTIONAL_HEADER.AddressOfEntryPoint)
@@ -78,7 +79,7 @@ def get_info(filename):
 	#print "Required CPU type:\t\t", pefile.MACHINE_TYPE[machine]
 	#print "Number of RVA and Sizes:\t", pe.OPTIONAL_HEADER.NumberOfRvaAndSizes
 
-	return fn, fs, ts, dl, sc
+	return fn, fs, ts, dl, sc, ad
 
 # Check for version info & metadata
 def convert_char(char):
@@ -505,3 +506,13 @@ def get_dump(filename):
 	pe = pefile.PE(filename)
 	return pe.dump_info()
 
+def get_digital_signature(filename):
+	pe = pefile.PE(filename)
+
+	address = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress
+
+	if address == 0:
+		return None
+
+	signature = pe.write()[address+8:]
+	return signature

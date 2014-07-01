@@ -25,6 +25,8 @@ try:
 	import json_output
 	import std_output
 	import db_manage
+	from pyasn1.codec.der import encoder as der_encoder
+	from asn1 import dn
 except ImportError:
 	print '[!] Error: library not found in modules folder.'
 	sys.exit(0)
@@ -45,11 +47,16 @@ def show_info(filename):
 	time = datetime.datetime.fromtimestamp(info[2])
 	dll  = info[3]
 	sect = info[4]
+	sig  = info[5]
 	if dll:
 		dll = "Yes"
 	else:
 		dll = "No"
-	return VERSION,str(date),str(name),str(size),str(time),dll,str(sect)
+	if sig:
+		sig = "Yes"
+	else:
+		sig = "No"
+	return VERSION,str(date),str(name),str(size),str(time),dll,str(sect),sig
 
 def show_hash(filename):
 	hashcode = pecore.get_hash(filename)
@@ -320,6 +327,7 @@ def autoanalysis(filename, json=False, skipdb=False):
 	time    = ak_info[4]
 	dll     = ak_info[5]
 	sect    = ak_info[6]
+	sig     = ak_info[7]
 	md5     = ak_hash[0]
 	sha1    = ak_hash[1]
 	imph    = ak_hash[2]
@@ -330,13 +338,13 @@ def autoanalysis(filename, json=False, skipdb=False):
 
 	if json:
 		# output in json
-		json_output.joutput(name,size,time,dll,sect,md5, \
+		json_output.joutput(name,size,time,dll,sect,sig,md5, \
 			sha1,imph,packer,antidbg,antivm,directory,pefver,date, \
 			au_show_pack,au_show_adbg,au_show_avm,au_show_api, \
 			au_show_sec,au_show_furl,au_show_meta)
 	else:
 		# standard output
-		std_output.stdoutput(name,size,time,dll,sect,md5, \
+		std_output.stdoutput(name,size,time,dll,sect,sig,md5, \
 			sha1,imph,packer,antidbg,antivm,directory,pefver,date, \
 			au_show_pack,au_show_adbg,au_show_avm,au_show_api, \
 			au_show_sec,au_show_furl,au_show_meta)

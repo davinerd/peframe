@@ -19,8 +19,8 @@
 
 import json
 
-def joutput(name,size,time,dll,sect,md5,sha1,imph,packer,antidbg,antivm,directory,pefver,date,au_show_pack,au_show_adbg,au_show_avm,au_show_api,au_show_sec,au_show_furl,au_show_meta):
-	j_short = json.dumps({"filename": name, "filesize": size, "timestamp": time, "dll": dll, "sections": sect, "md5": md5, \
+def joutput(name,size,time,dll,sect,sig,md5,sha1,imph,packer,antidbg,antivm,directory,pefver,date,au_show_pack,au_show_adbg,au_show_avm,au_show_api,au_show_sec,au_show_furl,au_show_meta):
+	j_short = json.dumps({"filename": name, "filesize": size, "timestamp": time, "dll": dll, "sections": sect, "signature": sig, "md5": md5, \
 					"sha1": sha1, "imphash": imph, "packer": packer, "antidbg": antidbg, "antivm": antivm, \
 					"directory": directory, "pefversion": pefver, "datetime": date})
 
