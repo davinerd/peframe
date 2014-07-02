@@ -506,7 +506,7 @@ def get_dump(filename):
 	pe = pefile.PE(filename)
 	return pe.dump_info()
 
-def get_digital_signature(filename):
+def get_sign_dump(filename):
 	pe = pefile.PE(filename)
 
 	address = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress

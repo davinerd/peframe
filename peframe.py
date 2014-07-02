@@ -246,7 +246,20 @@ def show_exported_functions(filename):
 
 def show_dump(filename):
 	dump = pecore.get_dump(filename)
+	sign = pecore.get_sign_dump(filename)
+
 	print dump
+
+	if sign:
+		# getting random filename
+		outderfile = os.path.basename (filename) + "-" + str(int(round(time.time() * 1000))) + ".der"
+		f = file(outderfile, 'wb+')
+		f.write(sign)
+		f.close()
+		print "Digital signature outputted in " + outderfile + " (DER format)"
+		print "Decode with 'openssl pkcs7 -inform DER -print_certs -text -in " + outderfile + " > OUT_FILE'"
+	else:
+		print "No signature dumped - file is not signed"
 
 def show_resource_dump(filename, directory):
 	if directory == "import":
@@ -462,4 +475,3 @@ if len(sys.argv) == 3:
 		show_dump(filename); sys.exit(0)
 	else:
 		help()
-
