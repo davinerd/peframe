@@ -25,6 +25,8 @@ try:
 	import json_output
 	import std_output
 	import db_manage
+	import auth_data
+	import ast
 	from pyasn1.codec.der import encoder as der_encoder
 	from asn1 import dn
 except ImportError:
@@ -304,6 +306,51 @@ def show_strings(filename):
 		for string in strings:
 			print string
 
+def show_signs(filename):
+	der = pecore.get_sign_dump(filename)
+	if not der:
+		print "File not signed"
+		return None
+		
+	# auth handles all the signatures information
+	auth = auth_data.AuthData(der)
+	
+	# we need first validate the certs so all the cert fields
+	# will be filled
+	try:
+		auth.ValidateAsn1()
+	#	auth.ValidateSignatures()
+		auth.ValidateCertChains(time.gmtime())
+	except auth_data.Asn1Error:
+		if auth.openssl_error:
+			print "OpenSSL Errors:\n%s" + auth.openssl_error
+		raise
+        
+	sign_cert = {}
+	sign_cert['info'] = ast.literal_eval(auth.signing_cert_id[0])
+	sign_cert['serial'] = auth.signing_cert_id[1]
+	sign_cert['issuer'] = auth.cert_chain_head[2]
+	sign_cert['time_not_before'] = time.asctime(time.gmtime(auth.cert_chain_head[0]))
+	sign_cert['time_not_after'] = time.asctime(time.gmtime(auth.cert_chain_head[1]))
+	
+	print "\nSignature"
+	print "-"*60
+	std_output.print_sign(sign_cert)
+	
+	if auth.has_countersignature:
+		counter_cert = {}
+		counter_cert['timestamp'] = time.asctime(time.gmtime(auth.counter_timestamp))
+		counter_cert['info'] = ast.literal_eval(auth.counter_chain_head[2][0])
+		counter_cert['serial'] = auth.counter_chain_head[2][1]
+		counter_cert['time_not_before'] = time.asctime(time.gmtime(auth.counter_chain_head[0]))
+		counter_cert['time_not_after'] = time.asctime(time.gmtime(auth.counter_chain_head[1]))
+		print "\nCounter Signature"
+		print "-"*60
+		std_output.print_sign(counter_cert)
+	else:
+		print "Counter signature NOT present"
+		
+	
 def check_isfile(filename):
 	isfile = os.path.isfile(filename)
 	if not isfile:
@@ -402,6 +449,7 @@ def help():
 	print
 	print "".ljust(4), "--strings".ljust(14), "Get all strings"
 	print "".ljust(4), "--sections".ljust(14), "Sections information"
+	print "".ljust(4), "--signs".ljust(14), "Siganture information"
 	print "".ljust(4), "--dump".ljust(14), "Dump all information"
 	
 	sys.exit(0)
@@ -471,6 +519,8 @@ if len(sys.argv) == 3:
 		show_strings(filename); sys.exit(0)
 	elif option == "--sections":
 		show_sections(filename); sys.exit(0)
+	elif option == "--signs":
+		show_signs(filename); sys.exit(0)
 	elif option == "--dump":
 		show_dump(filename); sys.exit(0)
 	else:
