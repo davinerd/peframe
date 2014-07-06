@@ -13,13 +13,13 @@ JSON output and SQlite database support are been introduced since version 4.0.
 **Options**
 
 <pre>
-     --skip-db		Skip database
-     --json		Output in json
-     --json-skip-db	Output in json and skip database
+     --skip-db		     Skip database
+     --json              Output in json
+     --json-skip-db	     Output in json and skip database
 
      --import       	Imported function and dll
      --export       	Exported function and dll
-     --signs		Print signature information
+     --signs		     Print signature information
 
      --dir-import   	Import directory
      --dir-export   	Export directory
