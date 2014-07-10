@@ -58,6 +58,7 @@ File Size          935281 byte
 Compile Time       2012-01-29 22:32:28
 DLL                No
 Sections           4
+Signature          Yes
 Hash MD5           cae18bdb8e9ef082816615e033d2d85b
 Hash SAH1          546060ad10a766e0ecce1feb613766a340e875c0
 Imphash            353cf96592db561b5ab4e408464ac6ae
@@ -195,6 +196,78 @@ FileDescription
 Translation         0x0809 0x04b0
 </pre>
 <i>(**note:** mixed information as an example)</i>
+
+<code>$ python peframe.py --signs malware.exe</code>
+
+<pre>
+Signature
+------------------------------------------------------------
+Info
+- C                US
+- OU               Terms of use at https://www.verisign.com/rpa (c)10, VeriSign Trust Network
+- O                VeriSign, Inc.
+- CN               VeriSign Class 3 Code Signing 2010 CA
+Serial             xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Issuer
+- C                US
+- OU               (c) 2006 VeriSign, Inc. - For authorized use only, VeriSign Trust Network
+- O                VeriSign, Inc.
+- CN               VeriSign Class 3 Public Primary Certification Authority - G5
+Not Before         Wed Jul xx 00:00:00 2013
+Not After          Sat Aug xx 00:00:00 2014
+
+Counter Signature
+------------------------------------------------------------
+Info
+- C                ZA
+- CN               Thawte Timestamping CA
+- L                Durbanville
+- O                Thawte
+- ST               Western Cape
+- OU               Thawte Certification
+Serial             xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Timestamp          Tue Apr xx 00:00:00 2014
+Not Before         Fri Dec xx 00:00:00 2012
+Not After          Tue Dec xx 00:00:00 2016
+
+Certificate
+------------------------------------------------------------
+Serial             xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Issuer
+- C                US
+- OU               (c) 2006 VeriSign, Inc. - For authorized use only, VeriSign Trust Network
+- O                VeriSign, Inc.
+- CN               VeriSign Class 3 Public Primary Certification Authority - G5
+Not Before         Mon Feb  xx 00:00:00 2010
+Not After          Fri Feb  xx 00:00:00 2012
+Subject
+- C                US
+- OU               Terms of use at https://www.verisign.com/rpa (c)10, VeriSign Trust Network
+- O                VeriSign, Inc.
+- CN               VeriSign Class 3 Code Signing 2010 CA
+MD5                xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+SHA1               xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Certificate
+------------------------------------------------------------
+Serial             xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Issuer
+- C                US
+- OU               Terms of use at https://www.verisign.com/rpa (c)10, VeriSign Trust Network
+- O                VeriSign, Inc.
+- CN               VeriSign Class 3 Code Signing 2010 CA
+Not Before         Wed Jul xx 00:00:00 2013
+Not After          Sat Aug xx 00:00:00 2014
+Subject
+- C                US
+- CN               BLABLACORP
+- L                Anywhere
+- O                BLABLACORP
+- ST               Anywhere
+- OU               Digital ID Class 3 - Microsoft Software Validation v2
+MD5                xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+SHA1               xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+</pre>
 
 Credit
 ======
