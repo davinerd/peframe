@@ -310,7 +310,7 @@ def show_strings(filename):
 def show_signs(filename):
     der = pecore.get_sign_dump(filename)
     if not der:
-        print "File not signed"
+        print "Signature not found"
         return None
 
     # auth handles all the signatures information
@@ -334,10 +334,6 @@ def show_signs(filename):
     sign_cert['time_not_before'] = time.asctime(time.gmtime(auth.cert_chain_head[0]))
     sign_cert['time_not_after'] = time.asctime(time.gmtime(auth.cert_chain_head[1]))
 
-    print "\nSignature"
-    print "-"*60
-    std_output.print_sign(sign_cert)
-
     if auth.has_countersignature:
         counter_cert = {}
         counter_cert['timestamp'] = time.asctime(time.gmtime(auth.counter_timestamp))
@@ -345,13 +341,28 @@ def show_signs(filename):
         counter_cert['serial'] = auth.counter_chain_head[2][1]
         counter_cert['time_not_before'] = time.asctime(time.gmtime(auth.counter_chain_head[0]))
         counter_cert['time_not_after'] = time.asctime(time.gmtime(auth.counter_chain_head[1]))
-        print "\nCounter Signature"
-        print "-"*60
-        std_output.print_sign(counter_cert)
 
+    print "\nSummary"
+    print "-"*60
+    print "Signature".ljust(18), "Yes"
+    if auth.has_countersignature:
+        print "Counter Signature".ljust(18), "Yes"
+    ncert = len(auth.certificates)
+    if ncert > 0:
+        print "Certificate".ljust(18), "Yes [", ncert, "]"
 
+    print "\nSignature"
+    print "-"*60
+    std_output.print_sign(sign_cert)
+    
+    print "\nCounter Signature"
+    print "-"*60
+    std_output.print_sign(counter_cert)
+
+    counter = 0
     for (issuer, serial), cert in auth.certificates.items():
-        print "\nCertificate"
+        counter += 1
+        print "\nCertificate [", counter, "]"
         print "-"*60
         certz = {}
         certz['issuer'] = ast.literal_eval(issuer)
