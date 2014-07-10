@@ -97,16 +97,30 @@ def stdoutput(name,size,time,dll,sect,sig,md5,sha1,imph,packer,antidbg,antivm,di
 
 def print_sign(cert):
 	if 'info' in cert:
+		print "Info"
 		for k,v in cert['info'].items():
-			print k.ljust(18), v
+			print "-", k.ljust(16), v
 		#a = json.loads(cert['info'].replace("''","\"\"")
 		#a = json.loads(str(cert['info']).replace("'","\""))
 		#print json.dumps(a, sort_keys=True, indent=4, separators=(',', ': '))
 	if 'serial' in cert:
-		print "Serial: ".ljust(18), str(cert['serial'])
+		print "Serial".ljust(18), str(cert['serial'])
+	if 'issuer' in cert:
+		print "Issuer"
+		for k,v in cert['issuer'].items():
+			print "-", k.ljust(16), v
 	if 'timestamp' in cert:
-		print "Timestamp: ".ljust(18), cert['timestamp']
+		print "Timestamp".ljust(18), cert['timestamp']
 	if 'time_not_before' in cert:
-		print "Not before: ".ljust(18), cert['time_not_before']
+		print "Not Before".ljust(18), cert['time_not_before']
 	if 'time_not_after' in cert:
-		print "Not after: ".ljust(18), cert['time_not_after']
+		print "Not After".ljust(18), cert['time_not_after']
+	if 'subject' in cert:
+		print "Subject"
+		for k,v in cert['subject'].items():
+			print "-", k.ljust(16), v
+	
+	if 'md5' in cert:
+		print "MD5".ljust(18), cert['md5']
+	if 'sha1' in cert:
+		print "SHA1".ljust(18), cert['sha1']
