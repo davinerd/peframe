@@ -17,8 +17,6 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-import simplejson as json
-
 def stdoutput(name,size,time,dll,sect,sig,md5,sha1,imph,packer,antidbg,antivm,directory,pefver,date,au_show_pack,au_show_adbg,au_show_avm,au_show_api,au_show_sec,au_show_furl,au_show_meta):
 	print "\nShort information"
 	print "-"*60
@@ -100,9 +98,6 @@ def print_sign(cert):
 		print "Info"
 		for k,v in cert['info'].items():
 			print "-", k.ljust(16), v
-		#a = json.loads(cert['info'].replace("''","\"\"")
-		#a = json.loads(str(cert['info']).replace("'","\""))
-		#print json.dumps(a, sort_keys=True, indent=4, separators=(',', ': '))
 	if 'serial' in cert:
 		print "Serial".ljust(18), str(cert['serial'])
 	if 'issuer' in cert:
