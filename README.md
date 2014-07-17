@@ -37,7 +37,11 @@ Install
 =======
 **Prerequisites**
 
-<code>Python 2.6.5 -> 2.7.x</code>
+<pre>
+Python 2.6.5 -> 2.7.x
+M2Crypto
+pyasn1 == 0.13b or >= pyasn1-0.1.4rc4
+</pre>
 
 **Download**
 
