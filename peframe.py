@@ -346,18 +346,26 @@ def show_signs(filename):
     print "-"*60
     print "Signature".ljust(18), "Yes"
     if auth.has_countersignature:
-        print "Counter Signature".ljust(18), "Yes"
+        yn = "Yes"
+    else:
+        yn = "No"
+    print "Counter Signature".ljust(18), yn
+    
     ncert = len(auth.certificates)
     if ncert > 0:
-        print "Certificate".ljust(18), "Yes ["+ str(ncert) +"]"
+        yn = "Yes ["+ str(ncert) +"]"
+    else:
+        yn = "No"
+    print "Certificate".ljust(18), yn
 
     print "\nSignature"
     print "-"*60
     std_output.print_sign(sign_cert)
     
-    print "\nCounter Signature"
-    print "-"*60
-    std_output.print_sign(counter_cert)
+    if auth.has_countersignature:
+        print "\nCounter Signature"
+        print "-"*60
+        std_output.print_sign(counter_cert)
 
     counter = 0
     for (issuer, serial), cert in auth.certificates.items():
