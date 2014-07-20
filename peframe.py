@@ -310,7 +310,7 @@ def show_strings(filename):
 def show_signs(filename):
     der = pecore.get_sign_dump(filename)
     if not der:
-        print "Signature not found"
+        print "Signature not found:", filename
         return None
 
     # auth handles all the signatures information
@@ -324,7 +324,7 @@ def show_signs(filename):
         auth.ValidateCertChains(time.gmtime())
     except auth_data.Asn1Error:
         if auth.openssl_error:
-            print "OpenSSL Errors:\n%s" + auth.openssl_error
+            print "OpenSSL Errors:", auth.openssl_error
         raise
 
     sign_cert = {}
