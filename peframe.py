@@ -349,7 +349,7 @@ def show_signs(filename):
         print "Counter Signature".ljust(18), "Yes"
     ncert = len(auth.certificates)
     if ncert > 0:
-        print "Certificate".ljust(18), "Yes ["+str(ncert)+"]"
+        print "Certificate".ljust(18), "Yes ["+ str(ncert) +"]"
 
     print "\nSignature"
     print "-"*60
@@ -362,7 +362,7 @@ def show_signs(filename):
     counter = 0
     for (issuer, serial), cert in auth.certificates.items():
         counter += 1
-        print "\nCertificate ["+str(counter)+"]"
+        print "\nCertificate ["+ str(counter) +"]"
         print "-"*60
         certz = {}
         certz['issuer'] = ast.literal_eval(issuer)
