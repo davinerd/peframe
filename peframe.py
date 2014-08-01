@@ -320,13 +320,12 @@ def show_signs(filename):
     # will be filled
     try:
         auth.ValidateAsn1()
-    #	auth.ValidateSignatures()
+    	auth.ValidateSignatures()
         auth.ValidateCertChains(time.gmtime())
-    except auth_data.Asn1Error:
-        if auth.openssl_error:
-            print "OpenSSL Errors:", auth.openssl_error
-        raise
-
+    except auth_data.Asn1Error as aerr:
+        print "[!] Error", aerr.args[0]
+        return None
+         
     sign_cert = {}
     sign_cert['info'] = ast.literal_eval(auth.signing_cert_id[0])
     sign_cert['serial'] = auth.signing_cert_id[1]
@@ -345,6 +344,13 @@ def show_signs(filename):
     print "\nSummary"
     print "-"*60
     print "Signature".ljust(18), "Yes"
+    
+    if len(auth.invalid_cert) > 0:
+        yn = "No"
+    else:
+        yn = "Yes"
+    print "Verified".ljust(18), yn
+    
     if auth.has_countersignature:
         yn = "Yes"
     else:
@@ -366,6 +372,13 @@ def show_signs(filename):
         print "\nCounter Signature"
         print "-"*60
         std_output.print_sign(counter_cert)
+    
+    if len(auth.invalid_cert) > 0:
+        print "\nInvalid Certificates"
+        print "-"*60
+        for icert in auth.invalid_cert:
+            std_output.print_sign(icert)
+            print "-"*40
 
     counter = 0
     for (issuer, serial), cert in auth.certificates.items():

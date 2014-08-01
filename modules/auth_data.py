@@ -22,7 +22,8 @@
 """
 
 import hashlib
-
+import ast
+import time, datetime
 
 from asn1 import dn
 from asn1 import oids
@@ -89,6 +90,7 @@ class AuthData(object):
   openssl_error = None
   cert_chain_head = None
   counter_chain_head = None
+  invalid_cert = []
 
   def __init__(self, content):
     self.container, rest = decoder.decode(content,
@@ -479,7 +481,7 @@ class AuthData(object):
         self.certificates[self.signing_cert_id])
     self.cert_chain_head = (not_before, not_after,
                             self._ExtractIssuer(top_cert))
-
+    
     if self.has_countersignature:
       cs_not_before, cs_not_after, cs_top_cert = self._ValidateCertChain(
           self.certificates[self.counter_sig_cert_id])
@@ -500,6 +502,7 @@ class AuthData(object):
     not_before = signee[0][0]['validity']['notBefore'].ToPythonEpochTime()
     not_after = signee[0][0]['validity']['notAfter'].ToPythonEpochTime()
     while True:
+      c = {}
       issuer = signee[0][0]['issuer']
       issuer_dn = str(dn.DistinguishedName.TraverseRdn(issuer[0]))
       signer = None
@@ -511,10 +514,6 @@ class AuthData(object):
       # Are we at the end of the chain?
       if not signer:
         break
-      self.ValidateCertificateSignature(signee, signer)
-      # Did we hit a self-signed certificate?
-      if signee == signer:
-        break
       t_not_before = signer[0][0]['validity']['notBefore'].ToPythonEpochTime()
       t_not_after = signer[0][0]['validity']['notAfter'].ToPythonEpochTime()
       if t_not_before > not_before:
@@ -523,6 +522,15 @@ class AuthData(object):
         not_before = t_not_before
       not_after = min(not_after, t_not_after)
       # Now let's go up a step in the cert chain.
+      if self.ValidateCertificateSignature(signee, signer) == 1:
+        c['info'] = ast.literal_eval(subject_dn)
+        c['issuer'] = ast.literal_eval(issuer_dn)
+        c['time_not_before'] = time.asctime(time.gmtime(not_before))
+        c['time_not_after'] = time.asctime(time.gmtime(not_after))
+        self.invalid_cert.append(c)
+      # Did we hit a self-signed certificate?
+      if signee == signer:
+        break
       signee = signer
     return not_before, not_after, signee
 
@@ -563,7 +571,9 @@ class AuthData(object):
     v = signed_m2.verify(pubkey)
     if v != 1:
       self.openssl_error = M2_Err.get_error()
-      raise Asn1Error('1: Validation of cert signature failed.')
+      #raise Asn1Error('1: Validation of cert signature failed.')
+      return 1
+    return 0
 
   def ValidateSignatures(self):
     """Validate encrypted hashes with respective public keys.
